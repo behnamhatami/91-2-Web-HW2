@@ -7,17 +7,32 @@
  * To change this template use File | Settings | File Templates.
  */
 
-
 function array_to_header($field_array)
 {
     $curl_request_headers = array();
     foreach ($field_array as $key => $value) {
         $curl_request_headers[] = "$key: $value";
     }
-    ;
     return $curl_request_headers;
 }
 
+
+function normalize($str){
+    return trim(html_entity_decode($str));
+}
+
+function bindCommand(&$cmd, $info)
+{
+    foreach ($info as $key => &$value){
+        $cmd->bindParam(':'.$key, $value);
+    }
+}
+
+function standardize_url($url, $base)
+{
+    if (strlen($url) > 2 && $url[0] == '.' && $url[1] == '/')
+        return $base . substr($url, 1);
+}
 
 function mystrpos($string, $needle, $nth)
 {

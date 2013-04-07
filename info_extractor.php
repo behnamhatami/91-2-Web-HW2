@@ -10,8 +10,11 @@
 
 include_once('simple_html_dom.php');
 include_once('util.php');
+
+
 $url_film = 'http://cinematicket.org/?p=Films';
 $url_cinema = 'http://cinematicket.org/?p=cinema';
+$url_base = 'http://cinematicket.org';
 $header = array(
     'Accept' => 'text/html',
     'Accept-Language' => 'en-US,en;q=0.5',
@@ -48,9 +51,9 @@ function get_cinema_info($url, $header)
     $html = get_html_content($url, $header);
     $cinema = $html->find('div.detailbox div.contain div.film', 0);
     $ret = [
-        'title' => $cinema->find('h1', 0)->innertext,
-        'address' => $cinema->find('p span.info', 0)->innertext,
-        'phone' => $cinema->find('p span.info', 1)->innertext
+        'name' => normalize($cinema->find('h1', 0)->innertext),
+        'address' => normalize($cinema->find('p span.info', 0)->plaintext),
+        'phone' => normalize($cinema->find('p span.info', 1)->plaintext)
     ];
     return $ret;
 }
@@ -58,14 +61,14 @@ function get_cinema_info($url, $header)
 function get_film_info($url, $header)
 {
     $html = get_html_content($url, $header);
-    #html = $html->find('div.detailbox div.contain', 0);
+    $html = $html->find('div.detailbox div.contain', 0);
     $film = $html->find('div.film', 0);
     $poster_url = $html->find('div.imgside p img.image', 0)->src;
-    $title = html_entity_decode($film->find('h1', 0)->innertext);
+    $title = normalize($film->find('h1', 0)->innertext);
     $title = trim(substr($title, 0, strpos($title, '(')));
-    $directors = trim(html_entity_decode($film->find('p span.info', 0)->innertext));
-    $producers = trim(html_entity_decode($film->find('p span.info', 1)->innertext));
-    $actors = trim(html_entity_decode($film->find('p span.info', 2)->innertext));
+    $directors = normalize($film->find('p span.info', 0)->innertext);
+    $producers = normalize($film->find('p span.info', 1)->innertext);
+    $actors = normalize($film->find('p span.info', 2)->innertext);
     $actors = preg_split('[،]', trim(substr($actors, 0, mystrpos($actors, '،', 2))));
 
     $ret = [
@@ -91,17 +94,17 @@ function get_scene_of_film($url, $header)
             $tgtop = $row->find('div.toggletop', 0);
             if ($tgtop == null)
                 continue;
-            $phone = html_entity_decode($tgtop->find('div.r span', 0)->innertext);
+            $phone = normalize($tgtop->find('div.r span', 0)->innertext);
             $phone = trim(substr($phone, strpos($phone, ':') + 1));
 
             foreach ($row->find('div.togglebox div.content div.sance table tbody tr td') as $sance) {
-                $date = html_entity_decode($sance->innertext);
+                $date = normalize($sance->innertext);
                 $start = strpos($date, '(');
                 $finish = strpos($date, ')');
                 $day = trim(substr($date, 0, $start));
                 $date = trim(substr($date, $start + 1, $finish - $start - 1));
                 foreach ($sance->find(' div.sancebox div.s') as $scene) {
-                    $time = trim(str_replace(':', '', html_entity_decode($scene->innertext)));
+                    $time = trim(str_replace(':', '', normalize($scene->innertext)));
                     $ret[] = [
                         'phone' => $phone,
                         'day' => $day,
