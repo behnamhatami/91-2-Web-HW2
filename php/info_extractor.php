@@ -29,9 +29,8 @@ function get_films_url($url, $header)
     $html = get_html_content($url, $header);
     $film_box = $html->find('div.filmbox', 0);
     $ret = array();
-    foreach ($film_box->find('div.con') as $film) {
-        $ret[] = $film->find('span', 1)->find('a', 0)->href;
-    }
+    foreach ($film_box->find('div.con') as $film)
+        $ret[] = standardize_url($film->find('span', 1)->find('a', 0)->href);
     return $ret;
 }
 
@@ -40,9 +39,8 @@ function get_cinemas_url($url, $header)
     $html = get_html_content($url, $header);
     $tabs = $html->find('div.tab_container', 0);
     $ret = array();
-    foreach ($tabs->find('div.cintab_content div.cinbox div.cin div.right h2 a') as $a) {
-        $ret[] = $a->href;
-    }
+    foreach ($tabs->find('div.cintab_content div.cinbox div.cin div.right h2 a') as $a)
+        $ret[] = standardize_url($a->href); 
     return $ret;
 }
 
@@ -50,16 +48,17 @@ function get_cinema_info($url, $header)
 {
     $html = get_html_content($url, $header);
     $cinema = $html->find('div.detailbox div.contain div.film', 0);
-    $ret = [
+    $ret = array( 
         'name' => normalize($cinema->find('h1', 0)->innertext),
         'address' => normalize($cinema->find('p span.info', 0)->plaintext),
-        'phone' => normalize($cinema->find('p span.info', 1)->plaintext)
-    ];
+        'phone' => normalize($cinema->find('p span.info', 1)->plaintext) 
+    );
     return $ret;
 }
 
 function get_film_info($url, $header)
 {
+
     $html = get_html_content($url, $header);
     $html = $html->find('div.detailbox div.contain', 0);
     $film = $html->find('div.film', 0);
@@ -69,15 +68,16 @@ function get_film_info($url, $header)
     $directors = normalize($film->find('p span.info', 0)->innertext);
     $producers = normalize($film->find('p span.info', 1)->innertext);
     $actors = normalize($film->find('p span.info', 2)->innertext);
-    $actors = preg_split('[،]', trim(substr($actors, 0, mystrpos($actors, '،', 2))));
-
-    $ret = [
-        'title' => $title,
-        'poster_url' => $poster_url,
+    $actors = trim(substr($actors, 0, mystrpos($actors, '،', 2)));
+    $actors = trim(substr($actors, 0, mystrpos($actors, '-', 2)));
+    
+    $ret = array(
+        'name' => $title,
+        'poster' => standardize_url($poster_url),
         'directors' => $directors,
         'producers' => $producers,
         'actors' => $actors
-    ];
+    );
 
     return $ret;
 }
@@ -89,7 +89,9 @@ function get_scene_of_film($url, $header)
     $boxonline = $html->find('table#ctl00_dlcinemaonline', 0);
     $boxoffline = $html->find('table#ctl00_dlcinema', 0);
     $ret = array();
-    foreach ([$boxoffline, $boxonline] as $box) {
+    foreach (array($boxoffline, $boxonline) as $box) {
+        if(!isset($box))
+            continue;
         foreach ($box->find('tbody tr td') as $row) {
             $tgtop = $row->find('div.toggletop', 0);
             if ($tgtop == null)
@@ -105,18 +107,12 @@ function get_scene_of_film($url, $header)
                 $date = trim(substr($date, $start + 1, $finish - $start - 1));
                 foreach ($sance->find(' div.sancebox div.s') as $scene) {
                     $time = trim(str_replace(':', '', normalize($scene->innertext)));
-                    $ret[] = [
+                    $ret[] = array(
                         'phone' => $phone,
                         'day' => $day,
                         'date' => $date,
-                        'time' => $time
-                    ];
-                    print_r([
-                        'phone' => $phone,
-                        'day' => $day,
-                        'date' => $date,
-                        'time' => $time
-                    ]);
+                        'time_fr' => $time
+                    );
                 }
             }
         }

@@ -7,6 +7,13 @@
  * To change this template use File | Settings | File Templates.
  */
 
+function truncate_string($str, $limit)
+{
+    if (strlen($str) > $limit)
+        return substr($str, 0, $limit - 4) . ' ...';
+    else return $str;
+}
+
 function array_to_header($field_array)
 {
     $curl_request_headers = array();
@@ -16,41 +23,56 @@ function array_to_header($field_array)
     return $curl_request_headers;
 }
 
+function run_sql_command(&$db, $sql, $info)
+{
+    if (isset($info)) {
+        $cmd = $db->prepare($sql);
+        bindCommand($cmd, $info);
+        $cmd->execute();
+    } else {
+        $db->execute($sql);
+    }
+}
 
-function normalize($str){
+function normalize($str)
+{
     return trim(html_entity_decode($str));
 }
 
 function bindCommand(&$cmd, $info)
 {
-    foreach ($info as $key => &$value){
-        $cmd->bindParam(':'.$key, $value);
-    }
+    foreach ($info as $key => &$value)
+        $cmd->bindParam(':' . $key, $value);
 }
 
-function standardize_url($url, $base)
+function standardize_url($url)
 {
+    $base = 'http://cinematicket.org';
     if (strlen($url) > 2 && $url[0] == '.' && $url[1] == '/')
         return $base . substr($url, 1);
+    if (strlen($url) > 1 && $url[0] == '/')
+        return $base . $url;
+    return $url;
 }
 
 function mystrpos($string, $needle, $nth)
 {
-    $max = strlen($string);
-    $n_max = strlen($needle);
+    $s_len = strlen($string);
+    $n_len = strlen($needle);
     $n = 0;
-    //Loop trough each character
-    for ($i = 0; $i < $max - $n_max; $i++) {
-        for ($j = 0; $j < $n_max; $j++) {
+
+    for ($i = 0; $i < $s_len - $n_len; $i++) {
+        for ($j = 0; $j < $n_len; $j++) {
             if ($string[$i + $j] != $needle[$j])
                 break;
-            if ($j == $n_max - 1) {
+            if ($j == $n_len - 1) {
                 if ($n == $nth)
                     return $i;
                 else $n++;
             }
         }
     }
+    return $s_len;
 }
 
 function get_html_content($url, $header)

@@ -1,0 +1,149 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    direction: rtl;
+    text-align: right;
+    font-family: Tahoma, Arial, Verdana;
+    font-size: 12px;
+    background-image: url(../images/dark-grey-tile.png);
+}
+
+#wrapper {
+    margin: auto;
+    width: 700px;
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+    background-color: #CCCCCC;
+}
+
+.content {
+    width: 650px;
+    margin: 10px auto;
+    border-radius: 5px;
+    background: #efefef;
+    padding: 10px 5px;
+    overflow: hidden;
+}
+
+.content .imgside {
+    float: right;
+    margin: 10px;
+}
+
+.content .imgside p {
+    margin: 0 auto 10px auto;
+    text-align: center;
+}
+
+.content .imgside .image {
+    width: 200px;
+    border: 1px solid #fff;
+    -moz-box-shadow: 4px 4px 4px #999;
+    -o-box-shadow: 4px 4px 4px #999;
+    -webkit-box-shadow: 4px 4px 4px #999;
+    box-shadow: 4px 4px 4px #999;
+}
+
+.content .film {
+    float: right;
+    margin: 10px 0;
+    direction: rtl;
+    width: 400px;
+}
+
+.content .film h1 {
+    color: #cf2b32;
+    font-weight: 700;
+    font-size: 14pt;
+}
+
+.content .film p {
+    margin: 0 auto;
+    width: 400px;
+    border-bottom: 1px dotted #ccc;
+    padding: 10px 0;
+    line-height: 16pt;
+    overflow: hidden;
+}
+
+table {
+    margin: 15px auto;
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: gray;
+}
+
+.cinema_header {
+    float: right;
+}
+
+div {
+    display: block;
+}
+
+.scene {
+    margin-right: 10px;
+}
+
+.scenebox {
+    float: right;
+    width: 57px;
+    padding: 1px 0px;
+    margin: 5px 0 5px 5px;
+    border: 1px solid #d9d9d9;
+    text-align: center;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.scenebox .start {
+    background: #eaeaea;
+    border-radius: 2px;
+    color: #333;
+    margin: 1px;
+    font-size: 8pt;
+    height: 18px;
+    line-height: 13pt;
+}
+
+.scenebox .finish {
+    background: #eaeaea;
+    border-radius: 2px;
+    color: #333;
+    margin: 1px;
+    font-size: 8pt;
+    height: 18px;
+    line-height: 13pt;
+}
+
+.toggletop {
+    width: 650px;
+    height: 20px;
+    padding: 5px 5px 0 5px;
+    margin: 3px 0px 2px 0px;
+    font-size: 9pt;
+    background: #eaeaea;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.datebox {
+    float: right;
+    width: 100px;
+    height: 40px;
+    padding: 1px 0px;
+    margin: 5px 5px 5px 5px;
+    border: 1px solid mediumseagreen;
+    text-align: center;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.daybox {
+    margin: 5px;
+    border: 2px solid mediumseagreen;
+}
