@@ -15,7 +15,7 @@ function view_film($film)
     <div rid="<?php echo $film['id'] ?>" name="<?php echo $film['name'] ?>" class="film-wrapper">
         <h2 class="film-title">
             <?php
-            echo truncate_string($film['name'], 35);
+            echo truncate_string($film['name'], 22);
             ?>
         </h2>
 
@@ -72,26 +72,30 @@ function view_detailed_film($id)
     <div class="content">
         <div class="imgside">
             <p>
-                <img src="<?php echo $film['poster']?>" alt="پستر فیلم <?php echo $film['name']?>" class="image">
+                <img src="<?php echo $film['poster'] ?>" alt="پستر فیلم <?php echo $film['name'] ?>" class="image">
             </p>
         </div>
         <div class="film">
             <h1><?php echo $film['name']?></h1>
+
             <p>
                 <label>کارگردان:</label>
                 <span class="info"><?php echo $film['directors']?></span>
             </p>
+
             <p>
                 <label>تهیه کننده:</label>
                 <span class="info"><?php echo $film['producers']?></span>
             </p>
+
             <p>
                 <label>بازیگران:</label>
                 <span class="info"><?php echo $film['actors']?></span>
             </p>
         </div>
     </div>
-    <table><tbody>
+    <table>
+    <tbody>
     <?php
     foreach ($cinemas as $cinema) {
         ?>
@@ -112,24 +116,24 @@ function view_detailed_film($id)
                         <table style="border-collapse: collapse;">
                             <tabody>
                                 <?php
-                                foreach ($cinema['instance'] as $day=>$day_cinema) {
+                                foreach ($cinema['instance'] as $day => $day_cinema) {
                                     ?>
                                     <tr>
                                         <div class="daybox">
                                             <div class="datebox">
                                                 <div style="margin: 10px 3px 10px 3px; display: block;">
-                                                    <?php echo $day.':'?>
+                                                    <?php echo $day . ':'?>
                                                 </div>
                                             </div>
                                             <?php
                                             foreach ($day_cinema as $scene) {
-                                            ?>
+                                                ?>
                                                 <div class="scenebox">
                                                     <div class="start">
-                                                        <?php echo intval($scene['time_fr']/100).':'.($scene['time_fr']%100) ?>
+                                                        <?php echo intval($scene['time_fr'] / 100) . ':' . ($scene['time_fr'] % 100) ?>
                                                     </div>
                                                     <div class="finish">
-                                                        <?php echo intval($scene['time_to']/100).':'.($scene['time_to']%100) ?>
+                                                        <?php echo intval($scene['time_to'] / 100) . ':' . ($scene['time_to'] % 100) ?>
                                                     </div>
                                                 </div>
                                             <?php
@@ -153,10 +157,68 @@ function view_detailed_film($id)
     </tbody></table>
 <?php
 }
+
 ?>
 
 <?php
-function view_search_pain(){
+function view_search_pain()
+{
+    ?>
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <label>ریخ شروع جستجو: </label>
+            </td>
+            <td>
+                <input id="mydate" type="date" class="" size="20px">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>تاریخ پایان جستجو: </label>
+            </td>
+            <td>
+                <input type="date" class="" size="20px">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>زمان شروع سانس</label>
+            </td>
+            <td>
+                <input type="time" class="" size="20px">
+            </td>
+        </tr>
 
+        <tr>
+            <td>
+                <label>زمان اتمام سانس</label>
+            </td>
+            <td>
+                <input type="time" class="" size="20px">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label> نام فیلم</label>
+            </td>
+            <td>
+                <input type="text" class="" size="20px">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label> نام سینما</label>
+            </td>
+            <td>
+                <input type="text" class="" size="20px">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+<?php
 }
+
 ?>

@@ -6,7 +6,19 @@
  * Time: 11:11 PM
  * To change this template use File | Settings | File Templates.
  */
+
+define('username', 'behnam');
+define('password', 'ensaniat');
+define('address', 'mysql:host=localhost;dbname=whw_2');
 include_once('info_extractor.php');
+
+// low-level functions
+function get_db_connection()
+{
+    $db = new PDO(address, username, password);
+    $db->query("SET NAMES 'utf8' COLLATE 'utf8_general_ci'");
+    return $db;
+}
 
 function insert_cinema($db, $info)
 {
@@ -81,25 +93,27 @@ function get_cinema_id($db, $phone)
         return $row['id'];
 }
 
-function update_database($url_film, $url_cinema, $header)
+function update_database()
 {
     gc_disable();
-    $db = new PDO('mysql:host=localhost;dbname=whw_2', 'behnam', 'ensaniat');
+    $db = get_db_connection();
 
-    $films_url = get_films_url($url_film, $header);
+    $films_url = get_films_url(url_film);
     print_r($films_url);
-//    $cinemas_url = get_cinemas_url($url_cinema, $header);
-//    foreach ($cinemas_url as $url) {
-//        insert_cinema($db, get_cinema_info($url, $header));
-//        print_r($url . '\n');
-//    }
+    $cinemas_url = get_cinemas_url(url_cinema);
+    print_r($cinemas_url);
+    foreach ($cinemas_url as $url) {
+        insert_cinema($db, get_cinema_info(get_html_content($url)));
+        print_r($url . '\n');
+    }
 
     foreach ($films_url as $url) {
+        $html = get_html_content($url);
         print_r($url . '\n');
-        $info = get_film_info($url, $header);
+        $info = get_film_info($html);
         insert_film($db, $info);
         $film_id = get_film_id($db, $info['name']);
-        foreach (get_scene_of_film($url, $header) as $scene)
+        foreach (get_scene_of_film($html) as $scene)
             insert_scene($db, $scene, $film_id);
 
         gc_enable();
@@ -110,50 +124,51 @@ function update_database($url_film, $url_cinema, $header)
 
 function get_films()
 {
-    $db = new PDO('mysql:host=localhost;dbname=whw_2', 'behnam', 'ensaniat');
+    $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_film`;";
     return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function get_cinemas()
 {
-    $db = new PDO('mysql:host=localhost;dbname=whw_2', 'behnam', 'ensaniat');
+    $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_cinema`;";
     return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function get_film_full_info($id)
 {
-    $db = new PDO('mysql:host=localhost;dbname=whw_2', 'behnam', 'ensaniat');
+    $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_film` WHERE `php_film`.`id`='$id';";
     $res = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    if(count($res) > 0)
+    if (count($res) > 0)
         return $res[0];
     else return null;
 }
 
-function get_cinema_full_info($id){
-    $db = new PDO('mysql:host=localhost;dbname=whw_2', 'behnam', 'ensaniat');
+function get_cinema_full_info($id)
+{
+    $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_cinema` WHERE `php_cinema`.`id`='$id';";
     $res = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    if(count($res) > 0)
+    if (count($res) > 0)
         return $res[0];
     else return null;
 }
 
 function get_film_cinemas($id)
 {
-    $db = new PDO('mysql:host=localhost;dbname=whw_2', 'behnam', 'ensaniat');
+    $db = get_db_connection();
     $sql = "SELECT DISTINCT(`php_scene`.`cinema_id`) FROM `whw_2`.`php_scene` WHERE `php_scene`.`film_id`='$id';";
     $items = $db->query($sql)->fetchALL(PDO::FETCH_COLUMN);
     $cinema_infos = array();
-    foreach($items as $item){
+    foreach ($items as $item) {
         $cinema_infos[$item] = get_cinema_full_info($item);
         $cinema_infos[$item]['instance'] = array();
     }
     $sql = "SELECT * FROM `whw_2`.`php_scene` WHERE `php_scene`.`film_id`='$id';";
     $items = $db->query($sql)->fetchALL(PDO::FETCH_ASSOC);
-    foreach($items as $item){
+    foreach ($items as $item) {
         $cinema_id = $item['cinema_id'];
         $date = $item['date'];
         unset($item['date']);
@@ -164,4 +179,30 @@ function get_film_cinemas($id)
     return $cinema_infos;
 }
 
-//update_database($url_film, $url_cinema, $header);
+function search_cinema($name)
+{
+    $db = get_db_connection();
+    $sql = "SELECT * FROM `whw_2`.`php_cinema` WHERE `php_cinema`.`name` LIKE '%$name%'";
+    $items = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    return $items;
+
+}
+
+function search_film($name)
+{
+    $db = get_db_connection();
+    $sql = "SELECT * FROM `whw_2`.`php_film` WHERE `php_film`.`name` LIKE '%$name%'";
+    $items = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    return $items;
+}
+
+function search_scene($date_fr, $date_to, $time_fr, $time_to)
+{
+    $db = get_db_connection();
+    $sql = "SELECT * FROM `whw_2`.`php_scene` WHERE `php_scene`.`date` >= '$date_fr' AND `php_scene`.`date` <= '$date_to'".
+    "AND  `php_scene`.`time_fr` >= $time_fr AND `php_scene`.`time_to` <= $time_to";
+    $items = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    return $items;
+}
+
+//update_database();

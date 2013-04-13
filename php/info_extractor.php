@@ -11,22 +11,12 @@
 include_once('simple_html_dom.php');
 include_once('util.php');
 
+define('url_film', 'http://cinematicket.org/?p=Films');
+define('url_cinema', 'http://cinematicket.org/?p=cinema');
 
-$url_film = 'http://cinematicket.org/?p=Films';
-$url_cinema = 'http://cinematicket.org/?p=cinema';
-$url_base = 'http://cinematicket.org';
-$header = array(
-    'Accept' => 'text/html',
-    'Accept-Language' => 'en-US,en;q=0.5',
-    'Cache-Control' => 'max-age=0',
-    'Connection' => 'keep-alive',
-    'Host' => 'cinematicket.org',
-    'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0'
-);
-
-function get_films_url($url, $header)
+function get_films_url($url)
 {
-    $html = get_html_content($url, $header);
+    $html = get_html_content($url);
     $film_box = $html->find('div.filmbox', 0);
     $ret = array();
     foreach ($film_box->find('div.con') as $film)
@@ -34,43 +24,41 @@ function get_films_url($url, $header)
     return $ret;
 }
 
-function get_cinemas_url($url, $header)
+function get_cinemas_url($url)
 {
-    $html = get_html_content($url, $header);
+    $html = get_html_content($url);
     $tabs = $html->find('div.tab_container', 0);
     $ret = array();
     foreach ($tabs->find('div.cintab_content div.cinbox div.cin div.right h2 a') as $a)
-        $ret[] = standardize_url($a->href); 
+        $ret[] = standardize_url($a->href);
     return $ret;
 }
 
-function get_cinema_info($url, $header)
+function get_cinema_info($html)
 {
-    $html = get_html_content($url, $header);
+
     $cinema = $html->find('div.detailbox div.contain div.film', 0);
-    $ret = array( 
-        'name' => normalize($cinema->find('h1', 0)->innertext),
-        'address' => normalize($cinema->find('p span.info', 0)->plaintext),
-        'phone' => normalize($cinema->find('p span.info', 1)->plaintext) 
+    $ret = array(
+        'name' => normalize_string($cinema->find('h1', 0)->innertext),
+        'address' => normalize_string($cinema->find('p span.info', 0)->plaintext),
+        'phone' => normalize_string($cinema->find('p span.info', 1)->plaintext)
     );
     return $ret;
 }
 
-function get_film_info($url, $header)
+function get_film_info($html)
 {
-
-    $html = get_html_content($url, $header);
     $html = $html->find('div.detailbox div.contain', 0);
     $film = $html->find('div.film', 0);
     $poster_url = $html->find('div.imgside p img.image', 0)->src;
-    $title = normalize($film->find('h1', 0)->innertext);
-    $title = trim(substr($title, 0, strpos($title, '(')));
-    $directors = normalize($film->find('p span.info', 0)->innertext);
-    $producers = normalize($film->find('p span.info', 1)->innertext);
-    $actors = normalize($film->find('p span.info', 2)->innertext);
-    $actors = trim(substr($actors, 0, mystrpos($actors, '،', 2)));
-    $actors = trim(substr($actors, 0, mystrpos($actors, '-', 2)));
-    
+    $title = normalize_string($film->find('h1', 0)->innertext);
+    $title = trim(mb_substr($title, 0, mb_strpos($title, '(', 0, encoding), encoding));
+    $directors = normalize_string($film->find('p span.info', 0)->innertext);
+    $producers = normalize_string($film->find('p span.info', 1)->innertext);
+    $actors = normalize_string($film->find('p span.info', 2)->innertext);
+    $actors = trim(mb_substr($actors, 0, new_strpos($actors, '،', 2), encoding));
+    $actors = trim(mb_substr($actors, 0, new_strpos($actors, '-', 2), encoding));
+
     $ret = array(
         'name' => $title,
         'poster' => standardize_url($poster_url),
@@ -83,30 +71,28 @@ function get_film_info($url, $header)
 }
 
 
-function get_scene_of_film($url, $header)
+function get_scene_of_film($html)
 {
-    $html = get_html_content($url, $header);
     $boxonline = $html->find('table#ctl00_dlcinemaonline', 0);
     $boxoffline = $html->find('table#ctl00_dlcinema', 0);
     $ret = array();
     foreach (array($boxoffline, $boxonline) as $box) {
-        if(!isset($box))
+        if (!isset($box))
             continue;
         foreach ($box->find('tbody tr td') as $row) {
             $tgtop = $row->find('div.toggletop', 0);
             if ($tgtop == null)
                 continue;
-            $phone = normalize($tgtop->find('div.r span', 0)->innertext);
-            $phone = trim(substr($phone, strpos($phone, ':') + 1));
-
+            $phone = normalize_string($tgtop->find('div.r span', 0)->innertext);
+            $phone = trim(mb_substr($phone, mb_strpos($phone, ':', 0, encoding) + 1, mb_strlen($phone, encoding), encoding));
             foreach ($row->find('div.togglebox div.content div.sance table tbody tr td') as $sance) {
-                $date = normalize($sance->innertext);
-                $start = strpos($date, '(');
-                $finish = strpos($date, ')');
-                $day = trim(substr($date, 0, $start));
-                $date = trim(substr($date, $start + 1, $finish - $start - 1));
+                $date = normalize_string($sance->innertext);
+                $start = mb_strpos($date, '(', 0, encoding);
+                $finish = mb_strpos($date, ')', 0, encoding);
+                $day = trim(mb_substr($date, 0, $start, encoding));
+                $date = trim(mb_substr($date, $start + 1, $finish - $start - 1, encoding));
                 foreach ($sance->find(' div.sancebox div.s') as $scene) {
-                    $time = trim(str_replace(':', '', normalize($scene->innertext)));
+                    $time = trim(mb_replace(':', '', normalize_string($scene->innertext)));
                     $ret[] = array(
                         'phone' => $phone,
                         'day' => $day,
@@ -119,4 +105,3 @@ function get_scene_of_film($url, $header)
     }
     return $ret;
 }
-
