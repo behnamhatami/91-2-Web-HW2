@@ -18,6 +18,7 @@ CREATE TABLE `php_cinema` (
 CREATE TABLE `php_scene` (
     `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `date` date NOT NULL,
+    `day` integer NOT NULL,
     `time_fr` integer NOT NULL,
     `time_to` integer NOT NULL,
     `cinema_id` integer NOT NULL,
@@ -25,8 +26,8 @@ CREATE TABLE `php_scene` (
     UNIQUE (`cinema_id`, `film_id`, `date`, `time_fr`)
 )
 ;
-ALTER TABLE `php_scene` ADD CONSTRAINT `film_id_refs_id_66a68a47` FOREIGN KEY (`film_id`) REFERENCES `php_film` (`id`);
 ALTER TABLE `php_scene` ADD CONSTRAINT `cinema_id_refs_id_90b0a099` FOREIGN KEY (`cinema_id`) REFERENCES `php_cinema` (`id`);
+ALTER TABLE `php_scene` ADD CONSTRAINT `film_id_refs_id_66a68a47` FOREIGN KEY (`film_id`) REFERENCES `php_film` (`id`);
 CREATE TABLE `php_user_attends` (
     `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `user_id` integer NOT NULL,
@@ -37,8 +38,7 @@ CREATE TABLE `php_user_attends` (
 ALTER TABLE `php_user_attends` ADD CONSTRAINT `scene_id_refs_id_63a2a306` FOREIGN KEY (`scene_id`) REFERENCES `php_scene` (`id`);
 CREATE TABLE `php_user` (
     `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `username` varchar(64) NOT NULL UNIQUE,
-    `password` varchar(64) NOT NULL
+    `username` varchar(64) NOT NULL UNIQUE
 )
 ;
 ALTER TABLE `php_user_attends` ADD CONSTRAINT `user_id_refs_id_d0a8a68a` FOREIGN KEY (`user_id`) REFERENCES `php_user` (`id`);

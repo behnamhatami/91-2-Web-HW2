@@ -11,16 +11,22 @@
     <script src="script/jquery-1.9.1.min.js"></script>
     <script src="script/jquery-ui.js"></script>
 
-    <script src="script/base.js"></script>
+    <script src="script/schedule.js"></script>
+
 </head>
 <body>
 <div id="wrapper">
+
     <?php
     include_once('view/base.php');
     echo get_header_as_html();
     ?>
     <div id="content">
         <div class="spacer"></div>
+        <?php
+        include_once('view/schedule.php');
+        get_schedue_as_html();
+        ?>
         <div class="spacer"></div>
     </div>
     <div id="footer"></div>

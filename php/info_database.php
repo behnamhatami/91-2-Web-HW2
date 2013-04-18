@@ -72,10 +72,9 @@ function insert_scene($db, $info, $film_id)
     $info['time_to'] = $time_to % 2400;
 
     unset($info['phone']);
-    unset($info['day']);
 
-    $sql = "INSERT `whw_2`.`php_scene` (`id`, `date`, `time_fr`, `time_to`, `cinema_id`, `film_id`)" .
-        "VALUES (NULL, :date, :time_fr, :time_to, :cinema_id, :film_id)";
+    $sql = "INSERT `whw_2`.`php_scene` (`id`, `date`, `day`, `time_fr`, `time_to`, `cinema_id`, `film_id`)" .
+        "VALUES (NULL, :date, :day, :time_fr, :time_to, :cinema_id, :film_id)";
     run_sql_command($db, $sql, $info);
 }
 
@@ -104,12 +103,14 @@ function update_database()
     print_r($cinemas_url);
     foreach ($cinemas_url as $url) {
         insert_cinema($db, get_cinema_info(get_html_content($url)));
-        print_r($url . '\n');
+        print_r($url);
+        println();
     }
 
     foreach ($films_url as $url) {
         $html = get_html_content($url);
-        print_r($url . '\n');
+        print_r($url);
+        println();
         $info = get_film_info($html);
         insert_film($db, $info);
         $film_id = get_film_id($db, $info['name']);
@@ -196,13 +197,67 @@ function search_film($name)
     return $items;
 }
 
-function search_scene($date_fr, $date_to, $time_fr, $time_to)
+function search_scene($date_fr, $date_to, $time_fr, $time_to, $film_name, $cinema_name, $city_name)
 {
     $db = get_db_connection();
-    $sql = "SELECT * FROM `whw_2`.`php_scene` WHERE `php_scene`.`date` >= '$date_fr' AND `php_scene`.`date` <= '$date_to'".
-    "AND  `php_scene`.`time_fr` >= $time_fr AND `php_scene`.`time_to` <= $time_to";
+
+    $sql = "SELECT " .
+        "`TEMP`.`id`, `TEMP`.`time_fr`, `TEMP`.`day` `TEMP`.`time_to`, `TEMP`.`date`, " .
+        "`TEMP`.`film_name`, `TEMP`.`directors`, `TEMP`.`producers`, `TEMP`.`actors`, " .
+        "`php_cinema`.`name` as `cinema_name`, `php_cinema`.`address`, `php_cinema`.`phone` " .
+        "FROM (" .
+        "SELECT " .
+        "`TEMP`.`id`, `TEMP`.`cinema_id`, `TEMP`.`day`, `TEMP`.`time_fr`, " .
+        "`TEMP`.`time_to`, `TEMP`.`date`, `php_film`.`name` as `film_name`, " .
+        "`php_film`.`directors` , `php_film`.`producers`, `php_film`.`actors` " .
+        "FROM " .
+        "(SELECT * FROM `whw_2`.`php_scene` " .
+        "WHERE `php_scene`.`date` >= '$date_fr' AND `php_scene`.`date` <= '$date_to' " .
+        "AND `php_scene`.`time_fr` >= $time_fr AND `php_scene`.`time_to` <= $time_to AND " .
+        "`php_scene`.`film_id` IN " .
+        "( SELECT `php_film`.`id` FROM `whw_2`.`php_film` " .
+        "WHERE `php_film`.`name` LIKE '%$film_name%' ) " .
+        "AND `php_scene`.`cinema_id` IN " .
+        "( SELECT `php_cinema`.`id` FROM `whw_2`.`php_cinema` " .
+        "WHERE `php_cinema`.`name` LIKE '%$cinema_name%' AND " .
+        "`php_cinema`.`address` LIKE '%$city_name%' ) " .
+        "ORDER BY `php_scene`.`time_fr` ASC LIMIT 0 , 60) AS `TEMP`, `whw_2`.`php_film` " .
+        "WHERE `php_film`.`id` = `TEMP`.`film_id`) AS TEMP, `whw_2`.`php_cinema` " .
+        "WHERE `php_cinema`.`id` = `TEMP`.`cinema_id`";
+//    println($sql);
     $items = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     return $items;
+}
+
+function validate($info)
+{
+    if ($info['from_date'] == "")
+        $info['from_date'] = '1390-1-1';
+    if ($info['date_to'] == "")
+        $info['date_to'] = '1399-1-1';
+    if ($info['time_to'] == "")
+        $info['time_to'] = '2359';
+    if ($info['from_time'] == "")
+        $info['from_time'] = "0000";
+    return $info;
+}
+
+function search($info)
+{
+    $info = validate($info);
+    $film_name = $info['film_name'];
+    $cinema_name = $info['cinema_name'];
+    $time_to = str_to_time($info['time_to']);
+    $from_time = str_to_time($info['from_time']);
+    $date_to = $info['date_to'];
+    $from_date = $info['from_date'];
+    $city_name = $info['city_name'];
+
+//    $films = search_film($film_name);
+//    $cinemas = search_cinema($cinema_name);
+    $scenes = search_scene($from_date, $date_to, $from_time, $time_to, $film_name, $cinema_name, $city_name);
+
+    return $scenes;
 }
 
 //update_database();

@@ -42,8 +42,6 @@ body {
     width: 200px;
     border: 1px solid #fff;
     -moz-box-shadow: 4px 4px 4px #999;
-    -o-box-shadow: 4px 4px 4px #999;
-    -webkit-box-shadow: 4px 4px 4px #999;
     box-shadow: 4px 4px 4px #999;
 }
 
@@ -70,14 +68,20 @@ body {
 }
 
 table {
-    margin: 15px auto;
+    margin: 10px auto;
     border-collapse: separate;
-    border-spacing: 2px;
     border-color: gray;
 }
 
 .cinema_header {
+    line-height: normal;
     float: right;
+}
+
+.open-close-image{
+    float: left;
+    background-color: blue;
+
 }
 
 div {

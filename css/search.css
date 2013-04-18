@@ -1,0 +1,191 @@
+#content #main-content {
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    width: auto;
+}
+
+#content #sidebar {
+    background: rgba(247, 247, 247, 0.59);
+    width: 23%;
+    float: left;
+    margin-left: 20px;
+    border-radius: 3px;
+    text-align: justify;
+}
+
+#content #sidebar #sidebar-header {
+    margin-top: 15px;
+    font-weight: bold;
+    margin-right: 4px;
+    margin-bottom: 15px;
+}
+
+#content #sidebar #search-pain {
+    width: 100%;
+}
+
+#content #sidebar td, th {
+    text-align: right;
+}
+
+#content #sidebar #search-pain label {
+    padding: 0px;
+    height: 30px;
+    width: 80px;
+    line-height: 20px;
+    font-size: 14px;
+    text-align: right;
+}
+
+#content #sidebar #search-pain input {
+    height: 30px;
+    width: 140px;
+    margin: 0px;
+    text-align: right;
+}
+
+#content #sidebar #search-pain .search-button {
+    width: 150px;
+    margin: auto;
+    display: block;
+}
+
+#content #sidebar #result-pain .search-again {
+    width: 150px;
+    margin: auto;
+    display: block;
+}
+
+#content #sidebar #result-pain {
+    width: 100%;
+}
+
+#content #sidebar #result-pain #result-list {
+    min-height: 300px;
+    max-height: 450px;
+    width: auto;
+    list-style: none;
+    padding: 5px 0px 1px 0px;
+    margin: 0px 0px 0px 2px;
+    overflow: auto;
+    display: block;
+}
+
+#content #sidebar #result-pain #result-list{
+    list-style: none;
+    padding: 5px 0px 1px 2px;
+    margin: 0;
+    overflow: auto;
+    display: block;
+}
+
+#content #sidebar #result-pain #result-list li {
+    margin-bottom: 3px;
+    text-align: right;
+}
+
+#content #sidebar #result-pain #result-list li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    margin-right: 4px;
+    margin-left: 4px;
+    padding: 6px 12px;
+    background: #f2f2f2;
+    border-radius: 5px;
+}
+
+#content #content-body {
+    float: right;
+    width: 74%;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#content #content-body #grid {
+    width: 100%;
+}
+
+#grid #hour-column {
+    line-height: 62px;
+    float: right;
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 2px;
+    color: #d9d9d9;
+    direction: ltr;
+    width: 5%;
+}
+
+#grid #week-columns {
+    margin-right: 0%;
+}
+
+#grid #week-columns .column {
+    width: 13.2%;
+    float: right;
+    margin-top: 4px;
+    margin-right: 2px;
+    border-radius: 5px;
+}
+
+#grid #week-columns .column .header {
+    background: rgb(248, 237, 179);
+    text-align: center;
+    height: 35px;
+    margin-bottom: 2px;
+}
+
+#grid #week-columns .column .events {
+    background: url("../images/calender-bg.fw.png");
+    height: 930px;
+    position: relative;
+}
+
+#grid .event {
+    color: rgb(0, 0, 0);
+    border: 1px solid rgb(226, 122, 184);
+    background: -webkit-linear-gradient(top, #f3b3e3 0%, #ec95c7 100%);
+    border-radius: 5px 5px 5px 5px;
+    text-align: center;
+    vertical-align: middle;
+    width: 95%;
+    margin: 0px 2.5%;
+    position: absolute;
+    overflow: hidden;
+}
+
+#grid a.del-button {
+    cursor: pointer;
+    position: absolute;
+    float: left;
+    left: 3px;
+    top: 3px;
+    width: 16px;
+    height: 16px;
+    background: url("../images/delete.png") no-repeat scroll 0% 0% transparent;
+}
+
+#grid .event .film-name {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#grid .event .cinema-name {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-weight: bold;
+}
+
+#grid .event .film-director {
+    font-size: 11px;
+}
+
+#grid .event p {
+    margin: 2px 0px 2px 0px;
+}
+

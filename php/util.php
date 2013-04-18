@@ -10,6 +10,22 @@
 define('url_base', 'http://cinematicket.org');
 define('encoding', 'UTF-8');
 
+function time_to_int($in)
+{
+    return ($in - $in % 100) + intval(($in % 100) / 60 * 100);
+}
+
+function str_to_time($in)
+{
+    return trim(mb_replace(':', '', normalize_string($in)));
+}
+
+function day_to_int($in)
+{
+    $week = ['شنبه' => 0, 'يکشنبه' => 1, 'دوشنبه' => 2, 'سه شنبه' => 3, 'چهارشنبه' => 4, 'پنج شنبه' => 5, 'جمعه' => 6];
+    return $week[$in];
+}
+
 function truncate_string($str, $limit)
 {
     if (mb_strlen($str, encoding) > $limit)
@@ -112,8 +128,9 @@ function mb_replace($search, $replace, $subject, &$count = 0)
     return $subject;
 }
 
-function println($string_message = '') {
-    return isset($_SERVER['SERVER_PROTOCOL']) ? print "$string_message<br />" . PHP_EOL:
+function println($string_message = '')
+{
+    return isset($_SERVER['SERVER_PROTOCOL']) ? print "$string_message<br />" . PHP_EOL :
         print $string_message . PHP_EOL;
 }
 

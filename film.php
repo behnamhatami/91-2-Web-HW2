@@ -6,13 +6,14 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link href="css/base.css" rel="stylesheet">
-    <link href="css/search.css" rel="stylesheet">
+    <link href="css/film.css" rel="stylesheet">
 
     <script src="script/jquery-1.9.1.min.js"></script>
     <script src="script/jquery-ui.js"></script>
 
-    <script src="script/base.js"></script>
+    <script src="script/film.js"></script>
 </head>
+
 <body>
 <div id="wrapper">
     <?php
@@ -21,6 +22,11 @@
     ?>
     <div id="content">
         <div class="spacer"></div>
+        <?php
+        include_once('php/info_database.php');
+        include_once('view/film.php');
+        view_all_films();
+        ?>
         <div class="spacer"></div>
     </div>
     <div id="footer"></div>

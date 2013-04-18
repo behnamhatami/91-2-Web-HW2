@@ -1,62 +1,13 @@
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-body {
-    direction: rtl;
-    text-align: right;
-    font-family: Tahoma, Arial, Verdana;
-    font-size: 12px;
-    background-image: url(../images/dark-grey-tile.png);
-}
-
-#wrapper {
-    margin: 30px 50px;
-}
-
-#header {
-    height: 50px;
-    background-color: #666666;
-}
-
-#content {
-    margin-top: 15px;
-    background-color: gray;
-}
-
-#content .spacer {
-    height: 15px;
-}
-
-#content .content-body {
-    margin-right: 30px;
-    margin-left: 250px;
-    min-height: 400px;
-    background-color: antiquewhite;
-}
-
-#content .big-content-body {
-    margin-left: 30px;
-    display: block;
-}
-
 .film-wrapper {
     margin: 10px;
     width: 197px;
     float: right;
 }
 
-h2 {
-    line-height: 24px;
-    margin: 0 0 0.5em;
-}
-
 .film-title {
     background: #333;
     border: 1px solid #111;
-    padding: 0px 15px 8px 15px;
+    padding: 0 15px 8px 15px;
     font-size: 16px;
     color: white;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
@@ -122,16 +73,6 @@ h2 {
     font-size: 1em;
 }
 
-div, span, a {
-    margin: 0;
-    padding: 0;
-    border: none;
-    display: block;
-    font-size: 1em;
-    line-height: 1.25em;
-    outline: none;
-}
-
 .ui-draggable .ui-dialog-titlebar {
     cursor: move;
 }
@@ -173,6 +114,11 @@ div, span, a {
     margin: -10px 0 0 0;
     padding: 1px;
     height: 18px;
+}
+
+
+.ui-dialog .ui-dialog-titlebar-close:hover {
+    background-color: black;
 }
 
 .ui-widget-header a {
@@ -226,9 +172,3 @@ div, span, a {
     height: 99%;
 }
 
-
-#footer {
-    margin-top: 15px;
-    height: 50px;
-    background-color: darkgray;
-}

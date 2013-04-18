@@ -89,7 +89,7 @@ function get_scene_of_film($html)
                 $date = normalize_string($sance->innertext);
                 $start = mb_strpos($date, '(', 0, encoding);
                 $finish = mb_strpos($date, ')', 0, encoding);
-                $day = trim(mb_substr($date, 0, $start, encoding));
+                $day = day_to_int(trim(mb_substr($date, 0, $start, encoding)));
                 $date = trim(mb_substr($date, $start + 1, $finish - $start - 1, encoding));
                 foreach ($sance->find(' div.sancebox div.s') as $scene) {
                     $time = trim(mb_replace(':', '', normalize_string($scene->innertext)));

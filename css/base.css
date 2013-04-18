@@ -1,0 +1,72 @@
+@font-face{
+    font-family:'Titr';
+    src:url('../font/B_Titr.ttf') format('truetype');
+    font-weight:normal;
+    font-style:normal }
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    direction: rtl;
+    text-align: right;
+    font-family: Tahoma, Arial, Verdana;
+    font-size: 12px;
+    background-image: url(../images/bg.jpg);
+}
+
+#wrapper {
+    margin: 30px 50px;
+}
+
+#header {
+}
+
+#content {
+    margin-top: 15px;
+    background-color: rgb(38, 107, 134);
+    border-radius: 5px;
+}
+
+#content .spacer {
+    height: 15px;
+}
+
+#content .content-body {
+    margin-right: 30px;
+    margin-left: 250px;
+    min-height: 400px;
+    border-radius: 2px;
+    background-color: rgb(230, 230, 230);
+}
+
+#content .big-content-body {
+    margin-left: 30px;
+    display: block;
+}
+
+h2 {
+    line-height: 24px;
+    margin: 0 0 0.5em;
+}
+
+div, span, a {
+    margin: 0;
+    padding: 0;
+    border: none;
+    display: block;
+    font-size: 1em;
+    line-height: 1.25em;
+    outline: none;
+}
+
+#footer {
+    margin-top: 15px;
+    height: 20px;
+    background-color: #d1d1d1;
+    direction: ltr;
+    text-align: left;
+}
