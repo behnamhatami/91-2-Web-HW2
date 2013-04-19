@@ -1,3 +1,8 @@
+<?php
+session_start();
+include_once('php/util.php');
+login_required();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +16,7 @@
     <script src="script/jquery-1.9.1.min.js"></script>
     <script src="script/jquery-ui.js"></script>
 
+    <script src="script/jquery.scrollintoview.min.js"></script>
     <script src="script/schedule.js"></script>
 
 </head>
@@ -19,7 +25,7 @@
 
     <?php
     include_once('view/base.php');
-    echo get_header_as_html();
+    get_header_as_html();
     ?>
     <div id="content">
         <div class="spacer"></div>

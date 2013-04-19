@@ -30,7 +30,7 @@
 }
 
 #content #sidebar #search-pain label {
-    padding: 0px;
+    padding: 0;
     height: 30px;
     width: 80px;
     line-height: 20px;
@@ -41,7 +41,7 @@
 #content #sidebar #search-pain input {
     height: 30px;
     width: 140px;
-    margin: 0px;
+    margin: 0;
     text-align: right;
 }
 
@@ -66,15 +66,15 @@
     max-height: 450px;
     width: auto;
     list-style: none;
-    padding: 5px 0px 1px 0px;
-    margin: 0px 0px 0px 2px;
+    padding: 5px 0 1px 0;
+    margin: 0 0 0 2px;
     overflow: auto;
     display: block;
 }
 
-#content #sidebar #result-pain #result-list{
+#content #sidebar #result-pain #result-list {
     list-style: none;
-    padding: 5px 0px 1px 2px;
+    padding: 5px 0 1px 2px;
     margin: 0;
     overflow: auto;
     display: block;
@@ -83,6 +83,7 @@
 #content #sidebar #result-pain #result-list li {
     margin-bottom: 3px;
     text-align: right;
+    cursor: pointer;
 }
 
 #content #sidebar #result-pain #result-list li a {
@@ -121,7 +122,7 @@
 }
 
 #grid #week-columns {
-    margin-right: 0%;
+    margin-right: 0;
 }
 
 #grid #week-columns .column {
@@ -149,13 +150,19 @@
     color: rgb(0, 0, 0);
     border: 1px solid rgb(226, 122, 184);
     background: -webkit-linear-gradient(top, #f3b3e3 0%, #ec95c7 100%);
+    background: -moz-linear-gradient(center top, #f3b3e3 0%, #ec95c7 100%) repeat scroll 0% 0% transparent;
     border-radius: 5px 5px 5px 5px;
     text-align: center;
     vertical-align: middle;
     width: 95%;
-    margin: 0px 2.5%;
+    margin: 0 2.5%;
     position: absolute;
     overflow: hidden;
+    width: 95%;
+}
+
+div.event:hover {
+    z-index: 100;
 }
 
 #grid a.del-button {
@@ -166,7 +173,7 @@
     top: 3px;
     width: 16px;
     height: 16px;
-    background: url("../images/delete.png") no-repeat scroll 0% 0% transparent;
+    background: url("../images/delete.png") no-repeat scroll 0 0 transparent;
 }
 
 #grid .event .film-name {
@@ -186,6 +193,6 @@
 }
 
 #grid .event p {
-    margin: 2px 0px 2px 0px;
+    margin: 2px 0 2px 0;
 }
 

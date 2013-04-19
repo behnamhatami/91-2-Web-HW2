@@ -94,7 +94,6 @@ function get_cinema_id($db, $phone)
 
 function update_database()
 {
-    gc_disable();
     $db = get_db_connection();
 
     $films_url = get_films_url(url_film);
@@ -107,6 +106,7 @@ function update_database()
         println();
     }
 
+    gc_disable();
     foreach ($films_url as $url) {
         $html = get_html_content($url);
         print_r($url);
@@ -202,7 +202,7 @@ function search_scene($date_fr, $date_to, $time_fr, $time_to, $film_name, $cinem
     $db = get_db_connection();
 
     $sql = "SELECT " .
-        "`TEMP`.`id`, `TEMP`.`time_fr`, `TEMP`.`day` `TEMP`.`time_to`, `TEMP`.`date`, " .
+        "`TEMP`.`id`, `TEMP`.`time_fr`, `TEMP`.`day`, `TEMP`.`time_to`, `TEMP`.`date`, " .
         "`TEMP`.`film_name`, `TEMP`.`directors`, `TEMP`.`producers`, `TEMP`.`actors`, " .
         "`php_cinema`.`name` as `cinema_name`, `php_cinema`.`address`, `php_cinema`.`phone` " .
         "FROM (" .
@@ -222,7 +222,7 @@ function search_scene($date_fr, $date_to, $time_fr, $time_to, $film_name, $cinem
         "WHERE `php_cinema`.`name` LIKE '%$cinema_name%' AND " .
         "`php_cinema`.`address` LIKE '%$city_name%' ) " .
         "ORDER BY `php_scene`.`time_fr` ASC LIMIT 0 , 60) AS `TEMP`, `whw_2`.`php_film` " .
-        "WHERE `php_film`.`id` = `TEMP`.`film_id`) AS TEMP, `whw_2`.`php_cinema` " .
+        "WHERE `php_film`.`id` = `TEMP`.`film_id`) AS `TEMP`, `whw_2`.`php_cinema` " .
         "WHERE `php_cinema`.`id` = `TEMP`.`cinema_id`";
 //    println($sql);
     $items = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -259,5 +259,59 @@ function search($info)
 
     return $scenes;
 }
+
+function add_user_if_not_exist($username)
+{
+    $db = get_db_connection();
+    $sql = "INSERT INTO `whw_2`.`php_user` " .
+        "(`id` ,`username`) " .
+        "VALUES " .
+        "(NULL , '$username');";
+    run_sql_command($db, $sql, null);
+    $sql = "SELECT *" .
+        "FROM `whw_2` . `php_user`" .
+        "WHERE `php_user`.`username` = '$username'";
+    foreach ($db->query($sql) as $row)
+        return $row['id'];
+}
+
+function get_all_scene_attend()
+{
+    $db = get_db_connection();
+    $user_id = $_SESSION['user_id'];
+
+    $sql = "SELECT `TEMP`.`id`, `TEMP`.`time_fr`, `TEMP`.`day`, `TEMP`.`time_to`, `TEMP`.`date`, " .
+        "`TEMP`.`film_name`, `TEMP`.`directors`, `TEMP`.`producers`, `TEMP`.`actors`, " .
+        "`php_cinema`.`name` as `cinema_name`, `php_cinema`.`address`, `php_cinema`.`phone` " .
+        "FROM (SELECT `TEMP`.`id`, `TEMP`.`cinema_id`, `TEMP`.`day`, `TEMP`.`time_fr`, " .
+        "`TEMP`.`time_to`, `TEMP`.`date`, `php_film`.`name` as `film_name`, `php_film`.`directors` , " .
+        "`php_film`.`producers`, `php_film`.`actors` FROM (SELECT * FROM `php_scene` WHERE " .
+        "`php_scene`.`id` IN (SELECT `php_user_attends`.`scene_id` as `id` FROM " .
+        "`whw_2`.`php_user_attends` WHERE `php_user_attends`.`user_id` = $user_id)) AS `TEMP`, " .
+        "`whw_2`.`php_film` WHERE `php_film`.`id` = `TEMP`.`film_id`) AS `TEMP`, " .
+        "`whw_2`.`php_cinema` WHERE `php_cinema`.`id` = `TEMP`.`cinema_id`";
+    return ($db->query($sql)->fetchAll(PDO::FETCH_ASSOC));
+}
+
+function remove_scene_attend($scene_id)
+{
+    $db = get_db_connection();
+    $user_id = $_SESSION['user_id'];
+
+    $sql = "DELETE FROM `whw_2`.`php_user_attends` WHERE `php_user_attends`.`user_id` = '$user_id' AND `php_user_attends`.`scene_id` = '$scene_id'";
+    print_r($sql);
+    run_sql_command($db, $sql, null);
+}
+
+function add_scene_attend($scene_id)
+{
+    $db = get_db_connection();
+    $user_id = $_SESSION['user_id'];
+
+    $sql = $sql = "INSERT INTO `whw_2`.`php_user_attends` (`id`, `user_id`, `scene_id`) VALUES (NULL, '$user_id', '$scene_id');";
+    println($sql);
+    run_sql_command($db, $sql, null);
+}
+
 
 //update_database();

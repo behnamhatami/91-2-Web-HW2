@@ -1,3 +1,8 @@
+<?php
+session_start();
+include_once('php/util.php');
+login_required();
+?>
 <!DOCTYPE html>
 <html>
 <head>

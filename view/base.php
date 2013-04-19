@@ -11,21 +11,24 @@ function get_header_as_html()
 {
     ?>
     <div id="header" class="icon-3x" style="display: block">
-        <div style="width: 500px; height: auto; margin: auto">
-            <a href="index.php" class="btn-large btn">
-                <li class="icon-3x icon-home"></li>
+        <div style="width: 600px; height: auto; margin: auto">
+            <a href="home.php" class="btn-large btn">
+                <div class="icon-3x icon-home"></div>
             </a>
             <a href="film.php" class="btn-large btn">
-                <li class="icon-film icon-3x"></li>
+                <div class="icon-film icon-3x"></div>
             </a>
             <a href="schedule.php" class="btn-large btn">
-                <li class="icon-calendar icon-3x"></li>
+                <div class="icon-calendar icon-3x"></div>
             </a>
             <a class="btn-large btn">
-                <li class="icon-envelope icon-3x"></li>
+                <div class="icon-envelope icon-3x"></div>
             </a>
             <a class="btn-large btn">
-                <li class="icon-cog icon-3x"></li>
+                <div class="icon-cog icon-3x"></div>
+            </a>
+            <a href="logout.php" class="btn-large btn">
+                <div class="icon-off icon-3x"></div>
             </a>
         </div>
     </div>

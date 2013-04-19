@@ -9,8 +9,6 @@
 
 function view_film($film)
 {
-    include_once('php/util.php');
-    include_once('php/info_database.php');
     ?>
     <div rid="<?php echo $film['id'] ?>" name="<?php echo $film['name'] ?>" class="film-wrapper">
         <h2 class="film-title">
@@ -38,7 +36,7 @@ function view_all_films()
 {
     ?>
     <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable"
-         style="display: none; z-index: 1002; outline: 0px; position: absolute; height: auto; width: 1163px; top: 46px; left: 46px; margin: 0; line-height: 1.25em;">
+         style="display: none; z-index: 1002; outline: 0; position: absolute; height: auto; width: 1163px; top: 46px; left: 46px; margin: 0; line-height: 1.25em;">
         <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
             <span class="ui-dialog-title">[name|="value"]</span>
 
@@ -47,7 +45,7 @@ function view_all_films()
             </div>
         </div>
         <div id="modal" class="ui-dialog-content ui-widget-content"
-             style="padding: 5px 0 0; width: auto; min-height: 0px; height: 539.4px;" scrolltop="0" scrollleft="0">
+             style="padding: 5px 0 0; width: auto; min-height: 0; height: 539.4px;" scrolltop="0" scrollleft="0">
         </div>
     </div>
     <div class="content-body big-content-body">
@@ -67,8 +65,8 @@ function view_all_films()
 function get_scene_html($info)
 {
     $base = 62;
-    $info = array('id' => 1, 'film_name' => 'حوض نقاشی', 'cinema_name' => 'بهنام', 'director' => 'بهنام حاتمی',
-        'time_fr' => 1200, 'time_to' => 1345);
+//    $info = array('id' => 1, 'film_name' => 'حوض نقاشی', 'cinema_name' => 'بهنام', 'director' => 'بهنام حاتمی',
+//        'time_fr' => 1200, 'time_to' => 1345);
     $top = (time_to_int($info['time_fr']) - 1100) / 100 * $base;
     $height = time_to_int($info['time_to']) - time_to_int($info['time_fr']);
     $height = ($height / 100) * $base;

@@ -1,4 +1,7 @@
 <?php
+session_start();
+include_once('php/util.php');
+login_required();
 /**
  * Created by JetBrains PhpStorm.
  * User: Behnam
@@ -7,17 +10,25 @@
  * To change this template use File | Settings | File Templates.
  */
 if (isset($_GET['command'])) {
-    $response = array('success' => '1');
-    if ($_GET['command'] == "remove_scene") {
-        if (isset($_Get['id'])) {
-            $result = array('result' => 'success');
-        } else {
-            $result = array('result' => 'failure');
-        }
+    include_once('php/info_database.php');
+
+    if ($_GET['command'] == "search") {
+        echo json_encode(search($_GET));
+        return;
     }
 
-    if($_GET['command'] == "search"){
-        include_once('php/info_database.php');
-        echo json_encode(search($_GET));
+    if($_GET['command'] == "get_all") {
+        echo json_encode(get_all_scene_attend());
+        return;
+    }
+
+    if($_GET['command'] == "remove") {
+        remove_scene_attend($_GET['id']);
+        return;
+    }
+
+    if($_GET['command'] == "add") {
+        add_scene_attend($_GET['id']);
+        return;
     }
 }

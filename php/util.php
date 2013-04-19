@@ -49,7 +49,37 @@ function run_sql_command(&$db, $sql, $info)
         bind_command($cmd, $info);
         $cmd->execute();
     } else {
-        $db->execute($sql);
+        $db->exec($sql);
+    }
+}
+
+function login_required()
+{
+    if (!isset($_SESSION['username'])) {
+        header('Location: index.php');
+        exit(0);
+    }
+}
+
+function login_passed()
+{
+    if (isset($_SESSION['username'])) {
+        header('Location: home.php');
+        exit(0);
+    }
+}
+
+function logout()
+{
+    unset($_SESSION['username']);
+    login_required();
+}
+
+function login(){
+    if (isset($_POST['username'])) {
+        include_once('php/info_database.php');
+        $_SESSION['user_id'] = add_user_if_not_exist($_POST['username']);
+        $_SESSION['username'] = $_POST['username'];
     }
 }
 

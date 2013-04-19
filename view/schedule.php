@@ -13,7 +13,7 @@ function get_schedue_as_html()
     ?>
     <div id="main-content">
         <div id="sidebar">
-            <div id="sidebar-header" style="font-family: 'B Titr Bold'; font-size: 17px;">
+            <div id="sidebar-header" style="font-family: 'B Titr Bold', Arial; font-size: 17px;">
                 جستجوی سانس
             </div>
 
@@ -58,13 +58,8 @@ function get_schedue_as_html()
             </div>
             <div id="result-pain" style="display: none;">
                 <ul id="result-list">
-                    <li>
-                        <a href="#">حوض نقاشی، سینما آزادی، 12:00</a>
-                    </li>
-                    <li>
-                        <a href="#">آز شیمی عمومی ۱</a>
-                    </li>
                 </ul>
+                <br>
                 <div class="btn btn-primary search-again">
                     جستجوی دوباره
                 </div>
