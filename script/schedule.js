@@ -10,20 +10,33 @@ $(document).ready(function () {
     $('#header .icon-calendar').css("color", "#004d75");
 
     var url = $('#search_form').attr('action');
-    $.getJSON(url, {command: 'get_all'}, function (response) {
-        for (var i in response)
-            $('#weekday-{0}'.format(response[i].day)).append(get_scene_html(response[i], false));
-    });
+    show_loading();
+    $.getJSON(url, {command: 'get_all_scene_attend'}, function (response) {
+            for (var i in response)
+                $('#weekday-{0}'.format(response[i].day)).append(get_scene_html(response[i], false));
+            hide_loading();
+        }
+    );
 
     $(window).scroll(function (event) {
-        // what the y position of the scroll is
-        var new_margin = $(this).scrollTop();
-        if(new_margin <= 550)
-            $('#sidebar').animate({marginTop: (((new_margin - new_margin % 120) / 120) * 120) + 'px'}, "fast");
+        var top = $(this).scrollTop();
+        if (top <= 663) {
+            $('#sidebar').css('position', 'fixed');
+            $('#sidebar').css('margin-top', '0');
+            $('#sidebar').css('width', '22.5%');
+            $('#sidebar').css('margin-right', '69.3%');
+
+        } else {
+            $('#sidebar').css('position', 'relative');
+            $('#sidebar').css('margin-top', '663px');
+            $('#sidebar').css('width', '24.1%');
+            $('#sidebar').css('margin-right', '0');
+        }
     });
 
 
     $('#search-pain .search-button').click(function () {
+        show_loading();
         var data = {
             command: 'search',
             film_name: $('#id_film_name').val(),
@@ -37,9 +50,9 @@ $(document).ready(function () {
         var url = $('#search_form').attr('action');
         $.getJSON(url, data, function (response) {
             $('#result-list li').remove();
-            for (var i in response) {
+            for (var i in response)
                 $('#result-list').append(get_list_item(response[i]));
-            }
+            hide_loading();
         });
         $('#search-pain').slideToggle('slow', function () {
             $('#result-pain').slideToggle('slow');
@@ -52,22 +65,39 @@ $(document).ready(function () {
     });
 });
 
+function show_loading() {
+    $('#loading').slideToggle();
+}
+
+function hide_loading() {
+    setTimeout(function () {
+            $('#loading').slideToggle();
+        }, 1000
+    );
+}
+
 function add_scene_attend(id) {
+    show_loading();
     var url = $('#search_form').attr('action');
     var data = {
         command: 'add',
         id: id
     };
-    $.getJSON(url, data);
+    $.getJSON(url, data, function (response) {
+        hide_loading();
+    });
 }
 
 function remove_scene_attend(id) {
+    show_loading();
     var url = $('#search_form').attr('action');
     var data = {
         command: 'remove',
         id: id
     };
-    $.getJSON(url, data);
+    $.getJSON(url, data, function (response) {
+        hide_loading();
+    });
 }
 
 function time_to_int(inp) {
@@ -78,9 +108,10 @@ function get_list_item(info) {
     var li_element = $(('<li><a>{2} ,{1} ,{0}</a></li>').format(info.film_name + '', info.cinema_name + '', info.time_fr + ''));
     li_element.hover(function () {
         console.log(info.id);
-        console.log(info);
         var div_element = get_scene_html(info, true);
-        div_element.css('background', '-webkit-linear-gradient(top, rgb(174, 243, 207) 0%,rgb(118, 189, 236) 100%)');
+        div_element.css('background', '-webkit-linear-gradient(top, #6cb8d5 0%, #94C3D5 100%)');
+        div_element.css('background', '-moz-linear-gradient(center top, #6cb8d5 0%, #94C3D5 100%) repeat scroll 0% 0% transparent');
+        div_element.css('border', '1px solid #246B86');
         $('#weekday-{0}'.format(info.day)).append(div_element);
     }, function () {
         $('#tp-scene-{0}'.format(info.id + '')).remove();
@@ -91,7 +122,10 @@ function get_list_item(info) {
         var id_after = 'scene-{0}'.format(info.id + '');
         if ($('#' + id_after).length > 0)
             return;
-        $('#' + id_before).css('background', '-webkit-linear-gradient(top, #f3b3e3 0%, #ec95c7 100%)');
+        $('#' + id_before).css('background', '-webkit-linear-gradient(top, #EAC467 0%, #f0dba4 100%)');
+        $('#' + id_before).css('background', '-moz-linear-gradient(center top, #EAC467 0%, #f0dba4 100%) repeat scroll 0% 0% transparent');
+        $('#' + id_before).css('border', '1px solid #D68A36');
+
         $('#' + id_before).attr('id', id_after);
     })
     return li_element;
@@ -101,9 +135,11 @@ function get_scene_html(info, tempo) {
     var base = 62;
     var time_to = time_to_int(info['time_to']);
     var time_fr = time_to_int(info['time_fr']);
+    if (time_fr == 0)
+        time_fr = 2400;
     if (time_to < time_fr)
         time_to = time_to + 2400;
-    var top = (time_fr - 1100) / 100 * base;
+    var top = (time_fr - 800) / 100 * base;
     var height = (time_to - time_fr) / 100 * base;
     var id = "scene-{0}".format(info.id);
     if (tempo)
@@ -123,11 +159,13 @@ function get_scene_html(info, tempo) {
         $(this).find('a').css('display', 'none');
     });
     element.find('a').hover(function () {
-        $(this).parent().css('background', '-webkit-linear-gradient(top, #f36d6a 0%, #ec534e 100%)');
-        $(this).parent().css('background', '-moz-linear-gradient(center top, #f36d6a 0%, #ec534e 100%) repeat scroll 0% 0% transparent');
+        $(this).parent().css('border', '1px solid #A03018');
+        $(this).parent().css('background', '-webkit-linear-gradient(top, #f08A75 0%, #f0b2a4 100%)');
+        $(this).parent().css('background', '-moz-linear-gradient(center top, #f08A75 0%, #f0b2a4 100%) repeat scroll 0% 0% transparent');
     }, function () {
-        $(this).parent().css('background', '-webkit-linear-gradient(top, #f3b3e3 0%, #ec95c7 100%)');
-        $(this).parent().css('background', '-moz-linear-gradient(center top, #f3b3e3 0%, #ec95c7 100%) repeat scroll 0% 0% transparent');
+        $(this).parent().css('border', '1px solid #D68A36');
+        $(this).parent().css('background', '-webkit-linear-gradient(top, #EAC467 0%, #f0dba4 100%)');
+        $(this).parent().css('background', '-moz-linear-gradient(center top, #EAC467 0%, #f0dba4 100%) repeat scroll 0% 0% transparent');
     });
     element.find('a').click(function () {
         $(this).parent().hide('slow', function () {
@@ -136,16 +174,4 @@ function get_scene_html(info, tempo) {
         });
     })
     return element;
-}
-
-if (!String.prototype.format) {
-    String.prototype.format = function () {
-        var args = arguments;
-        return this.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] != 'undefined'
-                ? args[number]
-                : match
-                ;
-        });
-    };
 }

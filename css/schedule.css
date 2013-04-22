@@ -7,11 +7,13 @@
 
 #content #sidebar {
     background: rgba(247, 247, 247, 0.59);
-    width: 23%;
+    width: 22.5%;
     float: left;
-    margin-left: 20px;
+    margin-left: 17px;
     border-radius: 3px;
     text-align: justify;
+    margin-right: 69.3%;
+    position: fixed;
 }
 
 #content #sidebar #sidebar-header {
@@ -63,7 +65,7 @@
 
 #content #sidebar #result-pain #result-list {
     min-height: 300px;
-    max-height: 450px;
+    max-height: 400px;
     width: auto;
     list-style: none;
     padding: 5px 0 1px 0;
@@ -134,7 +136,7 @@
 }
 
 #grid #week-columns .column .header {
-    background: rgb(248, 237, 179);
+    background: #EACF8A;
     text-align: center;
     height: 35px;
     margin-bottom: 2px;
@@ -142,15 +144,15 @@
 
 #grid #week-columns .column .events {
     background: url("../images/calender-bg.fw.png");
-    height: 930px;
+    height: 1106px;
     position: relative;
 }
 
 #grid .event {
     color: rgb(0, 0, 0);
-    border: 1px solid rgb(226, 122, 184);
-    background: -webkit-linear-gradient(top, #f3b3e3 0%, #ec95c7 100%);
-    background: -moz-linear-gradient(center top, #f3b3e3 0%, #ec95c7 100%) repeat scroll 0% 0% transparent;
+    border: 1px solid #D68A36;
+    background: -webkit-linear-gradient(top, #EAC467 0%, #f0dba4 100%);
+    background: -moz-linear-gradient(center top, #EAC467 0%, #f0dba4 100%) repeat scroll 0% 0% transparent;
     border-radius: 5px 5px 5px 5px;
     text-align: center;
     vertical-align: middle;

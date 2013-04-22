@@ -15,6 +15,7 @@ login_required();
     <script src="script/jquery-1.9.1.min.js"></script>
     <script src="script/jquery-ui.js"></script>
 
+    <script src="script/util.js"></script>
     <script src="script/base.js"></script>
 </head>
 <body>

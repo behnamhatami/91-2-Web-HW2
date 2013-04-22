@@ -49,11 +49,18 @@ function view_all_films()
         </div>
     </div>
     <div class="content-body big-content-body">
-        <?php
-        foreach (get_films() as $film) {
-            view_film($film);
-        }
-        ?>
+        <div class="film-tube">
+<!--                        --><?php
+            //                        foreach (get_all_films() as $film) {
+            //                            view_film($film);
+            //                        }
+            //                        ?>
+        </div>
+        <br style="clear: both"/>
+
+        <div id="sync" class="btn btn-block" style="margin: auto; width: 215px">
+            <i class="icon-3x icon-refresh"></i>
+        </div>
         <br style="clear: both"/>
     </div>
 <?php

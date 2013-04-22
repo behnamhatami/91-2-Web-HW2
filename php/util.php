@@ -83,9 +83,14 @@ function login(){
     }
 }
 
+
+function unicode_trim ($str) {
+    return preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $str);
+}
+
 function normalize_string($str)
 {
-    return trim(html_entity_decode($str));
+    return unicode_trim(html_entity_decode($str));
 }
 
 function bind_command(&$cmd, $info)
@@ -190,7 +195,6 @@ function get_html_content($url)
     $result = curl_exec($curl_handle);
 //Close connection
     curl_close($curl_handle);
-
     $htmlStr = substr($result, strpos($result, "\r\n\r\n"));
     return str_get_html($htmlStr);
 }

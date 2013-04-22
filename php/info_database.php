@@ -20,12 +20,12 @@ function get_db_connection()
     return $db;
 }
 
-function insert_cinema($db, $info)
+function insert_or_update_cinema_in_database($db, $info)
 {
-    $id = get_cinema_id($db, $info['phone']);
+    $id = get_cinema_id_by_phone($db, $info['phone']);
     if (isset($id)) {
         $info['id'] = $id;
-        update_cinema($db, $info);
+        update_cinema_in_database($db, $info);
     } else {
         $sql = "INSERT INTO `whw_2`.`php_cinema` (`id` ,`name` ,`address` ,`phone`) " .
             "VALUES (NULL , :name, :address, :phone);";
@@ -33,19 +33,19 @@ function insert_cinema($db, $info)
     }
 }
 
-function update_cinema($db, $info)
+function update_cinema_in_database($db, $info)
 {
     $sql = "UPDATE `whw_2`.`php_cinema` SET `name` = :name," .
         "`address` = :address,`phone` = :phone WHERE `php_cinema`.`id`=:id;";
     run_sql_command($db, $sql, $info);
 }
 
-function insert_film($db, $info)
+function insert_or_update_film_in_database($db, $info)
 {
-    $id = get_film_id($db, $info['name']);
+    $id = get_film_id_by_name($db, $info['name']);
     if (isset($id)) {
         $info['id'] = $id;
-        update_film($db, $info);
+        update_film_in_database($db, $info);
     } else {
         $sql = "INSERT `whw_2`.`php_film` (`id`, `name`, `poster`, `producers`, `directors`, `actors`)" .
             "VALUES (NULL, :name, :poster, :producers, :directors, :actors)";
@@ -53,7 +53,7 @@ function insert_film($db, $info)
     }
 }
 
-function update_film($db, $info)
+function update_film_in_database($db, $info)
 {
     $sql = "UPDATE `whw_2`.`php_film` SET `name` = :name," .
         " `poster` = :poster, `producers` = :producers, `directors`: :directors," .
@@ -62,10 +62,10 @@ function update_film($db, $info)
 }
 
 
-function insert_scene($db, $info, $film_id)
+function insert_scene_in_database($db, $info, $film_id)
 {
     $info['film_id'] = $film_id;
-    $info['cinema_id'] = get_cinema_id($db, $info['phone']);
+    $info['cinema_id'] = get_cinema_id_by_phone($db, $info['phone']);
     $time_to = $info['time_fr'] + 145;
     if ($time_to % 100 >= 60)
         $time_to += 40;
@@ -78,59 +78,81 @@ function insert_scene($db, $info, $film_id)
     run_sql_command($db, $sql, $info);
 }
 
-function get_film_id($db, $name)
+function get_film_id_by_name($db, $name)
 {
     $sql = "SELECT * FROM `whw_2`.`php_film` Where `php_film`.`name`='$name';";
     foreach ($db->query($sql) as $row)
         return $row['id'];
+    return null;
 }
 
-function get_cinema_id($db, $phone)
+function get_cinema_id_by_phone($db, $phone)
 {
     $sql = "SELECT * FROM `whw_2`.`php_cinema` Where `php_cinema`.`phone`='$phone';";
     foreach ($db->query($sql) as $row)
         return $row['id'];
+    return null;
 }
 
-function update_database()
+
+function update_all_live_film_info()
 {
     $db = get_db_connection();
-
-    $films_url = get_films_url(url_film);
-    print_r($films_url);
-    $cinemas_url = get_cinemas_url(url_cinema);
-    print_r($cinemas_url);
-    foreach ($cinemas_url as $url) {
-        insert_cinema($db, get_cinema_info(get_html_content($url)));
-        print_r($url);
-        println();
+    $film_infos = get_live_films_from_internet(url_film);
+    $ret = array();
+    foreach ($film_infos as $film) {
+        if (get_film_id_by_name($db, $film['name']) == null) {
+            insert_or_update_film($db, $film['url']);
+            $ret[] = get_film_full_info(get_film_id_by_name($db, $film['name']));
+        }
     }
+    return $ret;
+}
 
+function update_special_live_film_info($id)
+{
+    $db = get_db_connection();
+    $info = get_film_full_info($id);
+    $film_infos = get_live_films_from_internet(url_film);
+    foreach ($film_infos as $film)
+        if ($film['name'] == $info['name'])
+            insert_or_update_film($db, $film['url']);
+}
+
+function insert_or_update_film($db, $url)
+{
     gc_disable();
-    foreach ($films_url as $url) {
-        $html = get_html_content($url);
-        print_r($url);
-        println();
-        $info = get_film_info($html);
-        insert_film($db, $info);
-        $film_id = get_film_id($db, $info['name']);
-        foreach (get_scene_of_film($html) as $scene)
-            insert_scene($db, $scene, $film_id);
+    $html = get_html_content($url);
+    $info = get_film_info_from_internet($html);
+    insert_or_update_film_in_database($db, $info);
+    $film_id = get_film_id_by_name($db, $info['name']);
+    foreach (get_scenes_of_film_from_internet($html) as $scene)
+        insert_scene_in_database($db, $scene, $film_id);
 
-        gc_enable();
-        gc_disable();
-    }
     gc_enable();
 }
 
-function get_films()
+
+function update_all_database()
+{
+    $db = get_db_connection();
+
+    foreach (get_cinemas_info_from_internet(url_cinema) as $info)
+        insert_or_update_cinema_in_database($db, $info);
+
+    foreach (get_films_url_from_internet(url_film) as $url) {
+        insert_or_update_film($db, $url);
+    }
+}
+
+function get_all_films()
 {
     $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_film`;";
     return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function get_cinemas()
+function get_all_cinemas()
 {
     $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_cinema`;";
@@ -157,7 +179,7 @@ function get_cinema_full_info($id)
     else return null;
 }
 
-function get_film_cinemas($id)
+function get_cinemas_that_show_film($id)
 {
     $db = get_db_connection();
     $sql = "SELECT DISTINCT(`php_scene`.`cinema_id`) FROM `whw_2`.`php_scene` WHERE `php_scene`.`film_id`='$id';";
@@ -180,7 +202,7 @@ function get_film_cinemas($id)
     return $cinema_infos;
 }
 
-function search_cinema($name)
+function search_cinema_by_name($name)
 {
     $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_cinema` WHERE `php_cinema`.`name` LIKE '%$name%'";
@@ -189,7 +211,7 @@ function search_cinema($name)
 
 }
 
-function search_film($name)
+function seach_film_by_name($name)
 {
     $db = get_db_connection();
     $sql = "SELECT * FROM `whw_2`.`php_film` WHERE `php_film`.`name` LIKE '%$name%'";
@@ -197,7 +219,7 @@ function search_film($name)
     return $items;
 }
 
-function search_scene($date_fr, $date_to, $time_fr, $time_to, $film_name, $cinema_name, $city_name)
+function general_scene_search($date_fr, $date_to, $time_fr, $time_to, $film_name, $cinema_name, $city_name)
 {
     $db = get_db_connection();
 
@@ -224,12 +246,11 @@ function search_scene($date_fr, $date_to, $time_fr, $time_to, $film_name, $cinem
         "ORDER BY `php_scene`.`time_fr` ASC LIMIT 0 , 60) AS `TEMP`, `whw_2`.`php_film` " .
         "WHERE `php_film`.`id` = `TEMP`.`film_id`) AS `TEMP`, `whw_2`.`php_cinema` " .
         "WHERE `php_cinema`.`id` = `TEMP`.`cinema_id`";
-//    println($sql);
     $items = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     return $items;
 }
 
-function validate($info)
+function validate_search_info($info)
 {
     if ($info['from_date'] == "")
         $info['from_date'] = '1390-1-1';
@@ -244,7 +265,7 @@ function validate($info)
 
 function search($info)
 {
-    $info = validate($info);
+    $info = validate_search_info($info);
     $film_name = $info['film_name'];
     $cinema_name = $info['cinema_name'];
     $time_to = str_to_time($info['time_to']);
@@ -252,10 +273,7 @@ function search($info)
     $date_to = $info['date_to'];
     $from_date = $info['from_date'];
     $city_name = $info['city_name'];
-
-//    $films = search_film($film_name);
-//    $cinemas = search_cinema($cinema_name);
-    $scenes = search_scene($from_date, $date_to, $from_time, $time_to, $film_name, $cinema_name, $city_name);
+    $scenes = general_scene_search($from_date, $date_to, $from_time, $time_to, $film_name, $cinema_name, $city_name);
 
     return $scenes;
 }
@@ -299,7 +317,6 @@ function remove_scene_attend($scene_id)
     $user_id = $_SESSION['user_id'];
 
     $sql = "DELETE FROM `whw_2`.`php_user_attends` WHERE `php_user_attends`.`user_id` = '$user_id' AND `php_user_attends`.`scene_id` = '$scene_id'";
-    print_r($sql);
     run_sql_command($db, $sql, null);
 }
 
@@ -309,9 +326,5 @@ function add_scene_attend($scene_id)
     $user_id = $_SESSION['user_id'];
 
     $sql = $sql = "INSERT INTO `whw_2`.`php_user_attends` (`id`, `user_id`, `scene_id`) VALUES (NULL, '$user_id', '$scene_id');";
-    println($sql);
     run_sql_command($db, $sql, null);
 }
-
-
-//update_database();

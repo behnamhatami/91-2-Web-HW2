@@ -11,14 +11,13 @@ login_required();
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link href="css/base.css" rel="stylesheet">
-    <link href="css/search.css" rel="stylesheet">
+    <link href="css/schedule.css" rel="stylesheet">
 
     <script src="script/jquery-1.9.1.min.js"></script>
     <script src="script/jquery-ui.js"></script>
 
-    <script src="script/jquery.scrollintoview.min.js"></script>
+    <script src="script/util.js"></script>
     <script src="script/schedule.js"></script>
-
 </head>
 <body>
 <div id="wrapper">
