@@ -9,13 +9,13 @@
 $(document).ready(function () {
     $('#header .icon-film').css("color", "#004d75");
     $('.ui-draggable').draggable();
-    $(document).keyup(function (event) {
+    $(document).keydown(function (event) {
         if (event.which == 27) {
             $('.ui-dialog-titlebar-close').click();
         }
     });
     $('.ui-dialog-titlebar-close').click(function () {
-        $('.ui-draggable').hide();
+        $('.overlay').hide();
         $('#modal iframe').remove();
     });
     var url = "ajax.php";
@@ -23,7 +23,6 @@ $(document).ready(function () {
         add_all_filmbox(response);
     });
     $('#sync').click(function () {
-        console.log(sync_started());
         if (!sync_started()) {
             start_sync();
             $.getJSON(url, {'command': 'update_live_films'}, function (response) {
@@ -73,7 +72,7 @@ function create_filmbox(info) {
         var name = $(this).attr('name');
         $('#modal').append('<iframe src="./filmdetail.php?id=' + id + '"></iframe>');
         $('.ui-dialog .ui-dialog-titlebar .ui-dialog-title').text(name);
-        $('.ui-draggable').show();
+        $('.overlay').show();
     });
     return element;
 }

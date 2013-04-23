@@ -21,6 +21,21 @@ login_required();
 </head>
 
 <body>
+<div class="overlay" style="display: none;">
+    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable"
+         style="outline: 0; height: auto; width: 1163px; top: 46px; margin: auto; line-height: 1.25em; opacity: 1;">
+        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+            <span class="ui-dialog-title">[name|="value"]</span>
+
+            <div class="ui-dialog-titlebar-close ui-corner-all" style="cursor: pointer;">
+                <span class="ui-icon ui-icon-closethick">close</span>
+            </div>
+        </div>
+        <div id="modal" class="ui-dialog-content ui-widget-content"
+             style="padding: 5px 0 0; width: auto; min-height: 0; height: 539.4px;" scrolltop="0" scrollleft="0">
+        </div>
+    </div>
+</div>
 <div id="wrapper">
     <?php
     include_once('view/base.php');
