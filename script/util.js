@@ -19,7 +19,10 @@ if (!String.prototype.format) {
 }
 
 function int_to_time(inp){
-    return Math.floor(inp/100) + ':' + inp%100;
+    var out = Math.floor(inp/100) + ':' + inp%100;
+    if(inp % 100 == 0)
+        out = out + '0';
+    return out;
 }
 
 

@@ -95,8 +95,17 @@
     margin-right: 4px;
     margin-left: 4px;
     padding: 6px 12px;
-    background: #f2f2f2;
+    background-color: rgb(232, 232, 232);
     border-radius: 5px;
+}
+
+#content #sidebar #result-pain #result-list li a span {
+    width: 40px;
+    text-align: center;
+    background-color: rgb(244, 244, 244);
+    display: inline-block;
+    border-radius: 3px;
+    padding: 3px 1px;
 }
 
 #content #content-body {

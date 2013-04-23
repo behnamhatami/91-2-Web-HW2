@@ -105,7 +105,8 @@ function time_to_int(inp) {
 }
 
 function get_list_item(info) {
-    var li_element = $(('<li><a>{2} ,{1} ,{0}</a></li>').format(info.film_name + '', info.cinema_name + '', info.time_fr + ''));
+    var day = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنج شنبه', 'جمعه'];
+    var li_element = $(('<li><a><span>{2}</span> <span style="width: 60px">{3}</span>&nbsp &nbsp{1}، {0}</a></li>').format(info.film_name + '', info.cinema_name + '', int_to_time(info.time_fr) + ' ', day[info.day]));
     li_element.hover(function () {
         console.log(info.id);
         var div_element = get_scene_html(info, true);
@@ -149,7 +150,7 @@ function get_scene_html(info, tempo) {
     var element = ('<div id="{0}" class="event event-final" style="top:{1}px; height:{2}px;">' +
         '<a style="display: none;" class="del-button"></a>' +
         '<p class="film-name">{3}</p>' +
-        '<p class="cinema-name">{4}</p>' +
+        '<p class="cinema-name">{4}</p><br>' +
         '<p class="film-director">{5}</p>' +
         '</div>').format(id + '', top + '', height + '', info.film_name, info.cinema_name, info.directors);
     element = $(element);
