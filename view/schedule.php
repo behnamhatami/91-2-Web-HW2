@@ -13,7 +13,7 @@ function get_schedue_as_html()
     ?>
     <div id="main-content">
         <div id="sidebar">
-            <div id="sidebar-header" style="font-family: 'B Titr Bold'; font-size: 17px;">
+            <div id="sidebar-header">
                 جستجوی سانس
             </div>
 
@@ -76,9 +76,6 @@ function get_schedue_as_html()
                     <?php
                     for ($i = 8; $i <= 26; $i++) {
                         echo ($i % 24);
-                        if ($i % 24 <= 12)
-                            echo ' AM';
-                        else echo ' PM';
                         echo '<br>';
                     }
                     ?>
@@ -89,7 +86,8 @@ function get_schedue_as_html()
                         ?>
                         <div class="column">
                             <div class="header">
-                                <img src="images/weekdays/<?php echo $i; ?>.png">
+                                <?php echo int_to_day($i)?>
+<!--                                 <img src="images/weekdays/--><?php //echo $i; ?><!--.png">-->
                             </div>
                             <div id="weekday-<?php echo $i; ?>" class="events">
                                 <?php

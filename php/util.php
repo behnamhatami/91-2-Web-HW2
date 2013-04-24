@@ -26,6 +26,11 @@ function day_to_int($in)
     return $week[$in];
 }
 
+function int_to_day($in){
+    $days = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه'];
+    return $days[$in];
+}
+
 function truncate_string($str, $limit)
 {
     if (mb_strlen($str, encoding) > $limit)

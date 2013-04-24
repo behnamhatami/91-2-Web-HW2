@@ -19,14 +19,16 @@
     background: #333;
     border: 1px solid #111;
     padding: 0 15px 8px 15px;
-    font-size: 16px;
+    font-family: 'B Koodak';
+    font-size: 20px;
+    font-weight: bold;
     color: white;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
     letter-spacing: 0;
     border-radius: 5px 5px 0 0;
     font-weight: normal;
-    margin-bottom: 0;
     overflow: hidden;
+    margin-top: 2px;
     text-align: center;
 }
 
@@ -50,10 +52,11 @@
 }
 
 .film-director {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 9px;
+    padding-bottom: 1px;
     margin: auto;
     text-align: center;
+    font-size: 15px;
 }
 
 .ui-dialog {
@@ -111,6 +114,8 @@
 }
 
 .ui-dialog .ui-dialog-title {
+    font-family: 'B Koodak';
+    font-size: 20px;
     float: right;
     margin: .1em 16px .1em 0;
 }

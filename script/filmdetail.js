@@ -86,7 +86,7 @@ function create_cinema(cinema) {
                         <strong>\
                             {0}\
                         </strong>\
-                        <span style="font-size:8pt">\
+                        <span>\
                         {1}، تلفن: {2}\
                         </span>\
                     </div>\

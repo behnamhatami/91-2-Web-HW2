@@ -6,8 +6,8 @@
 body {
     direction: rtl;
     text-align: right;
-    font-family: Tahoma, Arial, Verdana;
-    font-size: 12px;
+    font-family: 'B NAZANIN', Arial, Verdana;
+    font-size: 15px;
     background-image: url(../images/dark-grey-tile.png);
 }
 
@@ -53,8 +53,9 @@ body {
 
 .content .film h1 {
     color: #cf2b32;
+    font-family: 'B Koodak';
     font-weight: 700;
-    font-size: 14pt;
+    font-size: 18pt;
 }
 
 .content .film p {
@@ -66,15 +67,15 @@ body {
     overflow: hidden;
 }
 
+.content .film p label{
+    font-size: 16px;
+    font-weight: bold;
+}
+
 table {
     margin: 10px auto;
     border-collapse: separate;
     border-color: gray;
-}
-
-.cinema_header {
-    line-height: normal;
-    float: right;
 }
 
 .open-close-image{
@@ -99,6 +100,7 @@ div {
     border: 1px solid #d9d9d9;
     text-align: center;
     border-radius: 3px;
+    font-size: 12px;
     overflow: hidden;
 }
 
@@ -107,7 +109,6 @@ div {
     border-radius: 2px;
     color: #333;
     margin: 1px;
-    font-size: 8pt;
     height: 18px;
     line-height: 13pt;
 }
@@ -117,7 +118,6 @@ div {
     border-radius: 2px;
     color: #333;
     margin: 1px;
-    font-size: 8pt;
     height: 18px;
     line-height: 13pt;
 }
@@ -127,11 +127,22 @@ div {
     height: 20px;
     padding: 5px 5px 0 5px;
     margin: 3px 0 2px 0;
-    font-size: 9pt;
     background: #eaeaea;
     cursor: pointer;
     border: 1px solid #ccc;
     border-radius: 3px;
+    font-size: 14px;
+}
+
+.toggletop .cinema_header{
+    margin-top: -3px;
+    line-height: normal;
+    float: right;
+}
+
+
+.toggletop strong{
+    font-family: 'B Koodak';
 }
 
 .datebox {

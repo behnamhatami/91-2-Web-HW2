@@ -20,17 +20,17 @@ $(document).ready(function () {
 
     $(window).scroll(function (event) {
         var top = $(this).scrollTop();
-        if (top <= 663) {
-            $('#sidebar').css('position', 'fixed');
-            $('#sidebar').css('margin-top', '0');
-            $('#sidebar').css('width', '22.5%');
-            $('#sidebar').css('margin-right', '69.3%');
-
-        } else {
+        if (top <= 135) {
             $('#sidebar').css('position', 'relative');
-            $('#sidebar').css('margin-top', '663px');
+            $('#sidebar').css('margin-top', '4px');
             $('#sidebar').css('width', '24.1%');
             $('#sidebar').css('margin-right', '0');
+            return;
+        } else {
+            $('#sidebar').css('position', 'fixed');
+            $('#sidebar').css('margin-top', '-135px');
+            $('#sidebar').css('width', '22.5%');
+            $('#sidebar').css('margin-right', '69.3%');
         }
     });
 
@@ -64,6 +64,13 @@ $(document).ready(function () {
         });
     });
 });
+
+function change_color_scene(element, first, last, border_color) {
+    element.css('background', '-webkit-linear-gradient(top, {0} 0%, {1} 100%)'.format(first + '', last + ''));
+    element.css('background', '-moz-linear-gradient(center top, {0} 0%, {1} 100%) repeat scroll 0% 0% transparent'.format(first + '', last + ''));
+    element.css('border', '1px solid {0}'.format(border_color + ''));
+
+}
 
 function show_loading() {
     $('#loading').slideToggle();
@@ -104,18 +111,48 @@ function time_to_int(inp) {
     return (inp - inp % 100) + Math.ceil((inp % 100) / 60 * 100);
 }
 
+function int_to_day(inp) {
+    var days = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه'];
+    return days[inp];
+}
+
 function get_list_item(info) {
-    var day = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنج شنبه', 'جمعه'];
-    var li_element = $(('<li><a><span>{2}</span> <span style="width: 60px">{3}</span>&nbsp &nbsp{1}، {0}</a></li>').format(info.film_name + '', info.cinema_name + '', int_to_time(info.time_fr) + ' ', day[info.day]));
+    var html_code =
+        '<li>\
+            <div class="tooltip">\
+                <h4>{0}</h4>\
+                <br>\
+                <label>کارگردان: </label>\
+                    {4}\
+                <br>\
+                <label>بازیگران: </label>\
+                    {5}\
+                <br>\
+                <label>تهیه‌کنندگان: </label>\
+                    {6}\
+                <br>\
+            </div>\
+            <a>\
+                <span>\
+                    {2}\
+                </span>\
+                <span style="width: 55px">\
+                    {3}\
+                </span>\
+                &nbsp &nbsp{1}، {0}\
+            </a>\
+         </li>'.format(info.film_name + '', info.cinema_name + '', int_to_time(info.time_fr) + ' ',
+                int_to_day(info.day), info.directors, info.actors, info.producers);
+    var li_element = $(html_code);
     li_element.hover(function () {
         console.log(info.id);
         var div_element = get_scene_html(info, true);
-        div_element.css('background', '-webkit-linear-gradient(top, #6cb8d5 0%, #94C3D5 100%)');
-        div_element.css('background', '-moz-linear-gradient(center top, #6cb8d5 0%, #94C3D5 100%) repeat scroll 0% 0% transparent');
-        div_element.css('border', '1px solid #246B86');
+        change_color_scene(div_element, '#6cb8d5', '#94C3D5', '#246B86');
         $('#weekday-{0}'.format(info.day)).append(div_element);
+        $(this).find('.tooltip').show();
     }, function () {
         $('#tp-scene-{0}'.format(info.id + '')).remove();
+        $(this).find('.tooltip').hide();
     })
     li_element.click(function () {
         add_scene_attend(info.id);
@@ -123,10 +160,7 @@ function get_list_item(info) {
         var id_after = 'scene-{0}'.format(info.id + '');
         if ($('#' + id_after).length > 0)
             return;
-        $('#' + id_before).css('background', '-webkit-linear-gradient(top, #EAC467 0%, #f0dba4 100%)');
-        $('#' + id_before).css('background', '-moz-linear-gradient(center top, #EAC467 0%, #f0dba4 100%) repeat scroll 0% 0% transparent');
-        $('#' + id_before).css('border', '1px solid #D68A36');
-
+        change_color_scene($('#' + id_before), '#EAC467', '#f0dba4', '#D68A36');
         $('#' + id_before).attr('id', id_after);
     })
     return li_element;
@@ -150,7 +184,7 @@ function get_scene_html(info, tempo) {
     var element = ('<div id="{0}" class="event event-final" style="top:{1}px; height:{2}px;">' +
         '<a style="display: none;" class="del-button"></a>' +
         '<p class="film-name">{3}</p>' +
-        '<p class="cinema-name">{4}</p><br>' +
+        '<p class="cinema-name">{4}</p>' +
         '<p class="film-director">{5}</p>' +
         '</div>').format(id + '', top + '', height + '', info.film_name, info.cinema_name, info.directors);
     element = $(element);
@@ -160,13 +194,9 @@ function get_scene_html(info, tempo) {
         $(this).find('a').css('display', 'none');
     });
     element.find('a').hover(function () {
-        $(this).parent().css('border', '1px solid #A03018');
-        $(this).parent().css('background', '-webkit-linear-gradient(top, #f08A75 0%, #f0b2a4 100%)');
-        $(this).parent().css('background', '-moz-linear-gradient(center top, #f08A75 0%, #f0b2a4 100%) repeat scroll 0% 0% transparent');
+        change_color_scene($(this).parent(), '#f08A75', '#f0b2a4', '#A03018');
     }, function () {
-        $(this).parent().css('border', '1px solid #D68A36');
-        $(this).parent().css('background', '-webkit-linear-gradient(top, #EAC467 0%, #f0dba4 100%)');
-        $(this).parent().css('background', '-moz-linear-gradient(center top, #EAC467 0%, #f0dba4 100%) repeat scroll 0% 0% transparent');
+        change_color_scene($(this).parent(), '#EAC467', '#f0dba4', '#D68A36');
     });
     element.find('a').click(function () {
         $(this).parent().hide('slow', function () {

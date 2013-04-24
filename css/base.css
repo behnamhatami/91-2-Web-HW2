@@ -1,3 +1,4 @@
+@import url(http://awebfont.ir/css?id=1069|1047|1106&mode=wl);
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -7,8 +8,8 @@
 body {
     direction: rtl;
     text-align: right;
-    font-family: Tahoma, Arial, Verdana;
-    font-size: 12px;
+    font-family: 'B NAZANIN', Arial, Verdana;
+    font-size: 15px;
     background-image: url(../images/bg.jpg);
 }
 

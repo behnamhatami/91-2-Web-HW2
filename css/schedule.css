@@ -3,22 +3,26 @@
     padding-bottom: 20px;
     padding-right: 20px;
     width: auto;
+    z-index: 0;
 }
 
 #content #sidebar {
     background: rgba(247, 247, 247, 0.59);
-    width: 22.5%;
+    width: 24.1%;
     float: left;
     margin-left: 17px;
     border-radius: 3px;
     text-align: justify;
-    margin-right: 69.3%;
-    position: fixed;
+    margin-right: 0;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
 }
 
 #content #sidebar #sidebar-header {
     margin-top: 15px;
-    font-weight: bold;
+    font-family: 'B Titr';
+    font-size: 20px;
     margin-right: 4px;
     margin-bottom: 15px;
 }
@@ -36,7 +40,7 @@
     height: 30px;
     width: 80px;
     line-height: 20px;
-    font-size: 14px;
+    font-size: 18px;
     text-align: right;
 }
 
@@ -51,12 +55,14 @@
     width: 150px;
     margin: auto;
     display: block;
+    font-size: 16px;
 }
 
 #content #sidebar #result-pain .search-again {
     width: 150px;
     margin: auto;
     display: block;
+    font-size: 16px;
 }
 
 #content #sidebar #result-pain {
@@ -100,18 +106,44 @@
 }
 
 #content #sidebar #result-pain #result-list li a span {
-    width: 40px;
+    width: 35px;
     text-align: center;
     background-color: rgb(244, 244, 244);
     display: inline-block;
     border-radius: 3px;
-    padding: 3px 1px;
+    padding: 2px 1px;
+}
+
+.tooltip {
+    position: absolute;
+    padding: 10px 13px;
+    left: 102.9%;
+    z-index: 20;
+    color: rgb(48, 48, 48);
+    background-color: rgb(240, 219, 164);
+    border: 1px solid rgb(222, 202, 126);
+    font-size: 12px;
+    line-height: 18px;
+    text-align: right;
+    border-radius: 4px;
+    width: 200px;
+    margin-left: 3px;
+    opacity: 0.8;
+    display: none;
+}
+
+.tooltip h4{
+    line-height: 20px;
+}
+
+.tooltip label{
+    display: inline-block;
+    line-height: 10px;
 }
 
 #content #content-body {
     float: right;
     width: 74%;
-    border: 1px solid black;
     border-radius: 5px;
 }
 
@@ -123,17 +155,17 @@
     line-height: 62px;
     float: right;
     margin-top: 5px;
-    font-size: 10px;
+    font-size: 15px;
     font-weight: bold;
     text-align: left;
     margin-left: 2px;
     color: #d9d9d9;
-    direction: ltr;
     width: 5%;
 }
 
 #grid #week-columns {
     margin-right: 0;
+    z-index: 1;
 }
 
 #grid #week-columns .column {
@@ -142,13 +174,17 @@
     margin-top: 4px;
     margin-right: 2px;
     border-radius: 5px;
+    direction: ltr;
 }
 
 #grid #week-columns .column .header {
     background: #EACF8A;
     text-align: center;
     height: 35px;
+    font-size: 20px;
+    font-family: 'B Titr';
     margin-bottom: 2px;
+    line-height: 35px;
 }
 
 #grid #week-columns .column .events {
@@ -173,7 +209,7 @@
 }
 
 div.event:hover {
-    z-index: 100;
+    z-index: 10;
 }
 
 #grid a.del-button {
@@ -188,18 +224,22 @@ div.event:hover {
 }
 
 #grid .event .film-name {
-    font-size: 11px;
+    margin-top: 5px;
+    font-size: 18px;
+    font-family: 'B Koodak';
     font-weight: bold;
     margin-bottom: 5px;
 }
 
 #grid .event .cinema-name {
+    font-size: 14px;
+    margin-top: 18px;
     padding-left: 5px;
     padding-right: 5px;
-    font-weight: bold;
 }
 
 #grid .event .film-director {
+    padding-top: 3px;
     font-size: 11px;
 }
 
